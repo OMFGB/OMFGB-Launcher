@@ -23,7 +23,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := android-common
 
 LOCAL_SRC_FILES := $(call all-subdir-java-files)
 
-LOCAL_PACKAGE_NAME := Launcher2
+LOCAL_PACKAGE_NAME := OMFGB-Launcher
 LOCAL_CERTIFICATE := shared
 
 LOCAL_OVERRIDES_PACKAGES := Home

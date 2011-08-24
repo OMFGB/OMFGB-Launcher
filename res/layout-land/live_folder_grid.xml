@@ -17,7 +17,7 @@
  */
 -->
 
-<com.android.launcher2.LiveFolder xmlns:android="http://schemas.android.com/apk/res/android"
+<com.t3hh4xx0r.omfgblauncher.LiveFolder xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
     
     <Button
@@ -52,4 +52,4 @@
              android:numColumns="5" />
     </FrameLayout>
 
-</com.android.launcher2.LiveFolder>
+</com.t3hh4xx0r.omfgblauncher.LiveFolder>

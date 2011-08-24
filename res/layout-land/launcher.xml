@@ -14,9 +14,9 @@
      limitations under the License.
 -->
 
-<com.android.launcher2.DragLayer
+<com.t3hh4xx0r.omfgblauncher.DragLayer
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.android.launcher"
+    xmlns:launcher="http://schemas.android.com/apk/res/com.t3hh4xx0r.omfgblauncher"
 
     android:id="@+id/drag_layer"
     android:layout_width="match_parent"
@@ -25,7 +25,7 @@
     <include layout="@layout/all_apps" />
 
     <!-- The workspace contains 3 screens of cells -->
-    <com.android.launcher2.Workspace
+    <com.t3hh4xx0r.omfgblauncher.Workspace
         android:id="@+id/workspace"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,9 +39,9 @@
         <include android:id="@+id/cell4" layout="@layout/workspace_screen" />
         <include android:id="@+id/cell5" layout="@layout/workspace_screen" />
 
-    </com.android.launcher2.Workspace>
+    </com.t3hh4xx0r.omfgblauncher.Workspace>
 
-    <com.android.launcher2.ClippedImageView
+    <com.t3hh4xx0r.omfgblauncher.ClippedImageView
         android:id="@+id/previous_screen"
         android:layout_width="93dip"
         android:layout_height="@dimen/button_bar_height"
@@ -58,7 +58,7 @@
         android:focusable="true"
         android:clickable="true" />
 
-    <com.android.launcher2.ClippedImageView
+    <com.t3hh4xx0r.omfgblauncher.ClippedImageView
         android:id="@+id/next_screen"
         android:layout_width="93dip"
         android:layout_height="@dimen/button_bar_height"
@@ -75,7 +75,7 @@
         android:focusable="true"
         android:clickable="true" />
 
-    <com.android.launcher2.DeleteZone
+    <com.t3hh4xx0r.omfgblauncher.DeleteZone
         android:id="@+id/delete_zone"
         android:layout_width="@dimen/delete_zone_size"
         android:layout_height="@dimen/delete_zone_size"
@@ -97,7 +97,7 @@
         android:layout_marginBottom="@dimen/half_status_bar_height"
         >
 
-        <com.android.launcher2.HandleView
+        <com.t3hh4xx0r.omfgblauncher.HandleView
             style="@style/HotseatButton"
             android:id="@+id/all_apps_button"
             android:layout_centerVertical="true"
@@ -128,4 +128,4 @@
             />
 
     </RelativeLayout>
-</com.android.launcher2.DragLayer>
+</com.t3hh4xx0r.omfgblauncher.DragLayer>

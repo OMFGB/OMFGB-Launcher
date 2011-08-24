@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 
-<com.android.launcher2.UserFolder xmlns:android="http://schemas.android.com/apk/res/android"
+<com.t3hh4xx0r.omfgblauncher.UserFolder xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
         
     <Button
@@ -48,4 +48,4 @@
              android:numColumns="4" />
     </FrameLayout>
 
-</com.android.launcher2.UserFolder>
+</com.t3hh4xx0r.omfgblauncher.UserFolder>
