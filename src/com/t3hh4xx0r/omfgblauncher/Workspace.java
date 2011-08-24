@@ -19,6 +19,8 @@ package com.t3hh4xx0r.omfgblauncher;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import mobi.intuitit.android.widget.WidgetSpace;
+import android.app.Activity;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
@@ -54,7 +56,7 @@ import com.t3hh4xx0r.omfgblauncher.R;
  * screen contains a number of icons, folders or widgets the user can interact with.
  * A workspace is meant to be used with a fixed width only.
  */
-public class Workspace extends ViewGroup implements DropTarget, DragSource, DragScroller {
+public class Workspace extends WidgetSpace implements DropTarget, DragSource, DragScroller {
     @SuppressWarnings({"UnusedDeclaration"})
     private static final String TAG = "Launcher.Workspace";
     private static final int INVALID_SCREEN = -1;
@@ -815,6 +817,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
 
         for (int i = fromScreen; i <= toScreen; i++) {
             final CellLayout layout = (CellLayout) getChildAt(i);
+            layout.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
             layout.setChildrenDrawnWithCacheEnabled(true);
             layout.setChildrenDrawingCacheEnabled(true);
         }
@@ -1210,6 +1213,7 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
     
     void setLauncher(Launcher launcher) {
         mLauncher = launcher;
+        registerProvider();
     }
 
     public void setDragController(DragController dragController) {
@@ -1511,5 +1515,10 @@ public class Workspace extends ViewGroup implements DropTarget, DragSource, Drag
                 return new SavedState[size];
             }
         };
+    }
+    
+    @Override
+    public Activity getLauncherActivity() {
+        return mLauncher;
     }
 }
