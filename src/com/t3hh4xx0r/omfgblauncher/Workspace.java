@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -59,7 +60,7 @@ import com.t3hh4xx0r.omfgblauncher.R;
 public class Workspace extends WidgetSpace implements DropTarget, DragSource, DragScroller {
     @SuppressWarnings({"UnusedDeclaration"})
     private static final String TAG = "Launcher.Workspace";
-    private static final int INVALID_SCREEN = -1;
+    private static final int INVALID_SCREEN = -999;
     
     /**
      * The velocity at which a fling gesture will cause us to snap to the next screen
@@ -301,8 +302,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         if (!mScroller.isFinished()) mScroller.abortAnimation();
         clearVacantCache();
         mCurrentScreen = Math.max(0, Math.min(currentScreen, getChildCount() - 1));
-        mPreviousIndicator.setLevel(mCurrentScreen);
-        mNextIndicator.setLevel(mCurrentScreen);
+        updateIndicators(mCurrentScreen);
         scrollTo(mCurrentScreen * getWidth(), 0);
         updateWallpaperOffset();
         invalidate();
@@ -445,15 +445,23 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     @Override
     public void computeScroll() {
         if (mScroller.computeScrollOffset()) {
-            mTouchX = mScrollX = mScroller.getCurrX();
             mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
-            mScrollY = mScroller.getCurrY();
+            mTouchX = mScroller.getCurrX();
+            super.scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             updateWallpaperOffset();
             postInvalidate();
         } else if (mNextScreen != INVALID_SCREEN) {
+            if (mNextScreen == -1 && Preferences.getInstance().getEndlessScrolling()) {
+                mCurrentScreen = getChildCount() - 1;
+                scrollTo(mCurrentScreen * getWidth(), getScrollY());
+                updateWallpaperOffset();
+            } else if (mNextScreen == getChildCount() && Preferences.getInstance().getEndlessScrolling()) {
+                mCurrentScreen = 0;
+                scrollTo(0, getScrollY());
+                updateWallpaperOffset();
+        } else
             mCurrentScreen = Math.max(0, Math.min(mNextScreen, getChildCount() - 1));
-            mPreviousIndicator.setLevel(mCurrentScreen);
-            mNextIndicator.setLevel(mCurrentScreen);
+            updateIndicators(mCurrentScreen);
             Launcher.setScreen(mCurrentScreen);
             mNextScreen = INVALID_SCREEN;
             clearChildrenCache();
@@ -461,7 +469,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             final float now = System.nanoTime() / NANOTIME_DIV;
             final float e = (float) Math.exp((now - mSmoothingTime) / SMOOTHING_CONSTANT);
             final float dx = mTouchX - mScrollX;
-            mScrollX += dx * e;
+            final int scrolltoX =  getScrollX() + (int)(dx * e);
+            super.scrollTo(scrolltoX, getScrollY());
             mSmoothingTime = now;
 
             // Keep generating points as long as we're more than 1px away from the target
@@ -471,6 +480,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             }
         }
     }
+
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
@@ -488,20 +498,52 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             drawChild(canvas, getChildAt(mCurrentScreen), getDrawingTime());
         } else {
             final long drawingTime = getDrawingTime();
+            int width = getWidth();
             final float scrollPos = (float) mScrollX / getWidth();
-            final int leftScreen = (int) scrollPos;
-            final int rightScreen = leftScreen + 1;
-            if (leftScreen >= 0) {
+            int leftScreen;
+            int rightScreen;
+            boolean isScrollToRight = false;
+            int childCount = getChildCount();
+            if (scrollPos < 0 && Preferences.getInstance().getEndlessScrolling()) {
+                leftScreen = getChildCount() - 1;
+                rightScreen = 0;
+            } else {
+                leftScreen = Math.min( (int) scrollPos, childCount - 1);
+                rightScreen = leftScreen + 1;
+            if (Preferences.getInstance().getEndlessScrolling()) {
+                rightScreen = rightScreen % getChildCount();
+                isScrollToRight = true;
+            }
+        }
+        if (isScreenNoValid(leftScreen)) {
+            if (rightScreen == 0 && !isScrollToRight) {
+                int offset = childCount * width;
+                canvas.translate(-offset, 0);
+                drawChild(canvas, getChildAt(leftScreen), drawingTime);
+                canvas.translate(+offset, 0);
+            } else {
                 drawChild(canvas, getChildAt(leftScreen), drawingTime);
             }
-            if (scrollPos != leftScreen && rightScreen < getChildCount()) {
+        }
+        if (scrollPos != leftScreen && isScreenNoValid(rightScreen)) {
+            if (Preferences.getInstance().getEndlessScrolling() && rightScreen == 0 && isScrollToRight) {
+                int offset = childCount * width;
+                canvas.translate(+offset, 0);
                 drawChild(canvas, getChildAt(rightScreen), drawingTime);
+                canvas.translate(-offset, 0);
+            } else {
+                drawChild(canvas, getChildAt(rightScreen), drawingTime);
+            }
             }
         }
 
         if (restore) {
             canvas.restoreToCount(restoreCount);
         }
+    }
+
+    private boolean isScreenNoValid(int screen) {
+        return screen >= 0 && screen < getChildCount();
     }
 
     protected void onAttachedToWindow() {
@@ -878,9 +920,14 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                         mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
                         invalidate();
                     }
+                    else if (Preferences.getInstance().getEndlessScrolling() && mTouchX > -getWidth()) {
+                        mTouchX += deltaX;
+                        mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
+                        invalidate();
+                    }
                 } else if (deltaX > 0) {
                     final float availableToScroll = getChildAt(getChildCount() - 1).getRight() -
-                            mTouchX - getWidth();
+                        mTouchX - (Preferences.getInstance().getEndlessScrolling() ? 0 : getWidth());
                     if (availableToScroll > 0) {
                         mTouchX += Math.min(availableToScroll, deltaX);
                         mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
@@ -895,19 +942,19 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             if (mTouchState == TOUCH_STATE_SCROLLING) {
                 final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                final int velocityX = (int) velocityTracker.getXVelocity(mActivePointerId);
+                final int velocityX = (int) velocityTracker.getXVelocity();
                 
                 final int screenWidth = getWidth();
-                final int whichScreen = (mScrollX + (screenWidth / 2)) / screenWidth;
+                final int whichScreen = (int)Math.floor((getScrollX() + (screenWidth / 2.0)) / screenWidth);
                 final float scrolledPos = (float) mScrollX / screenWidth;
                 
-                if (velocityX > SNAP_VELOCITY && mCurrentScreen > 0) {
+                if (velocityX > SNAP_VELOCITY && (mCurrentScreen > (Preferences.getInstance().getEndlessScrolling() ? -1 : 0))) {
                     // Fling hard enough to move left.
                     // Don't fling across more than one screen at a time.
                     final int bound = scrolledPos < whichScreen ?
                             mCurrentScreen - 1 : mCurrentScreen;
                     snapToScreen(Math.min(whichScreen, bound), velocityX, true);
-                } else if (velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - 1) {
+                } else if (velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - (Preferences.getInstance().getEndlessScrolling() ? 0 : 1)) {
                     // Fling hard enough to move right
                     // Don't fling across more than one screen at a time.
                     final int bound = scrolledPos > whichScreen ?
@@ -960,15 +1007,15 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     private void snapToScreen(int whichScreen, int velocity, boolean settle) {
         //if (!mScroller.isFinished()) return;
 
-        whichScreen = Math.max(0, Math.min(whichScreen, getChildCount() - 1));
+        whichScreen = Math.max((Preferences.getInstance().getEndlessScrolling() ? -1 : 0),
+            Math.min(whichScreen, getChildCount() - (Preferences.getInstance().getEndlessScrolling() ? 0 : 1)));
         
         clearVacantCache();
         enableChildrenCache(mCurrentScreen, whichScreen);
 
         mNextScreen = whichScreen;
 
-        mPreviousIndicator.setLevel(mNextScreen);
-        mNextIndicator.setLevel(mNextScreen);
+        updateIndicators(mNextScreen);
 
         View focusedChild = getFocusedChild();
         if (focusedChild != null && whichScreen != mCurrentScreen &&
@@ -1244,19 +1291,21 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     public void scrollLeft() {
         clearVacantCache();
+        final int dest = Preferences.getInstance().getEndlessScrolling() ? -1 : 0;
         if (mScroller.isFinished()) {
-            if (mCurrentScreen > 0) snapToScreen(mCurrentScreen - 1);
+            if (mCurrentScreen > dest) snapToScreen(mCurrentScreen - 1);
         } else {
-            if (mNextScreen > 0) snapToScreen(mNextScreen - 1);            
+            if (mNextScreen > dest) snapToScreen(mNextScreen - 1);            
         }
     }
 
     public void scrollRight() {
         clearVacantCache();
+        final int dest = Preferences.getInstance().getEndlessScrolling() ? 0 : 1;
         if (mScroller.isFinished()) {
-            if (mCurrentScreen < getChildCount() -1) snapToScreen(mCurrentScreen + 1);
+            if (mCurrentScreen < getChildCount() -dest) snapToScreen(mCurrentScreen + 1);
         } else {
-            if (mNextScreen < getChildCount() -1) snapToScreen(mNextScreen + 1);            
+            if (mNextScreen < getChildCount() -dest) snapToScreen(mNextScreen + 1);            
         }
     }
 
@@ -1483,8 +1532,12 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     void setIndicators(Drawable previous, Drawable next) {
         mPreviousIndicator = previous;
         mNextIndicator = next;
-        previous.setLevel(mCurrentScreen);
-        next.setLevel(mCurrentScreen);
+        updateIndicators(mCurrentScreen);
+    }
+    
+    private void updateIndicators(int screen) {
+        mPreviousIndicator.setLevel(screen);
+        mNextIndicator.setLevel(screen);
     }
 
     public static class SavedState extends BaseSavedState {

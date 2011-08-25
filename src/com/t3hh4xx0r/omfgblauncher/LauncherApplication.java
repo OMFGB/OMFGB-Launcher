@@ -33,7 +33,8 @@ public class LauncherApplication extends Application {
         VMRuntime.getRuntime().setMinimumHeapSize(4 * 1024 * 1024);
 
         super.onCreate();
-
+        
+        Preferences.getInstance().setContext(this);
         mIconCache = new IconCache(this);
         mModel = new LauncherModel(this, mIconCache);
 
@@ -65,6 +66,7 @@ public class LauncherApplication extends Application {
 
         ContentResolver resolver = getContentResolver();
         resolver.unregisterContentObserver(mFavoritesObserver);
+        Preferences.getInstance().setContext(null);
     }
 
     /**

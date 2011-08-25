@@ -33,6 +33,9 @@
     <string name="uid_name">Android Core Apps</string>
     <!-- Default folder name -->
     <string name="folder_name">Folder</string>
+    <!-- Menus -->
+    <string name="menu_launcher_settings">Launcher Prefs</string>
+    <string name="settings_endless_desktop_loop">Endless Looping</string> 
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Select wallpaper from</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->

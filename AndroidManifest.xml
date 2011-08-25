@@ -27,25 +27,25 @@
     <original-package android:name="com.t3hh4xx0r.omfgblauncher" />
 
     <permission
-        android:name="com.t3hh4xx0r.omfgblauncher.permission.INSTALL_SHORTCUT"
+        android:name="com.android.launcher.permission.INSTALL_SHORTCUT"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="normal"
         android:label="@string/permlab_install_shortcut"
         android:description="@string/permdesc_install_shortcut" />
     <permission
-        android:name="com.t3hh4xx0r.omfgblauncher.permission.UNINSTALL_SHORTCUT"
+        android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="normal"
         android:label="@string/permlab_uninstall_shortcut"
         android:description="@string/permdesc_uninstall_shortcut"/>
     <permission
-        android:name="com.t3hh4xx0r.omfgblauncher.permission.READ_SETTINGS"
+        android:name="com.android.launcher.permission.READ_SETTINGS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="normal"
         android:label="@string/permlab_read_settings"
         android:description="@string/permdesc_read_settings"/>
     <permission
-        android:name="com.t3hh4xx0r.omfgblauncher.permission.WRITE_SETTINGS"
+        android:name="com.android.launcher.permission.WRITE_SETTINGS"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="normal"
         android:label="@string/permlab_write_settings"
@@ -60,8 +60,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.BIND_APPWIDGET" />
-    <uses-permission android:name="com.t3hh4xx0r.omfgblauncher.permission.READ_SETTINGS" />
-    <uses-permission android:name="com.t3hh4xx0r.omfgblauncher.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
     
     <application
         android:name="com.t3hh4xx0r.omfgblauncher.LauncherApplication"
@@ -97,21 +97,25 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SettingsActivity"
+        />
+
         <!-- Intent received used to install shortcuts from other applications -->
         <receiver
             android:name="com.t3hh4xx0r.omfgblauncher.InstallShortcutReceiver"
-            android:permission="com.t3hh4xx0r.omfgblauncher.permission.INSTALL_SHORTCUT">
+            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT">
             <intent-filter>
-                <action android:name="com.t3hh4xx0r.omfgblauncher.action.INSTALL_SHORTCUT" />
+                <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
             </intent-filter>
         </receiver>
 
         <!-- Intent received used to uninstall shortcuts from other applications -->
         <receiver
             android:name="com.t3hh4xx0r.omfgblauncher.UninstallShortcutReceiver"
-            android:permission="com.t3hh4xx0r.omfgblauncher.permission.UNINSTALL_SHORTCUT">
+            android:permission="com.android.launcher.permission.UNINSTALL_SHORTCUT">
             <intent-filter>
-                <action android:name="com.t3hh4xx0r.omfgblauncher.action.UNINSTALL_SHORTCUT" />
+                <action android:name="com.android.launcher.action.UNINSTALL_SHORTCUT" />
             </intent-filter>
         </receiver>
 
@@ -119,8 +123,8 @@
         <provider
             android:name="com.t3hh4xx0r.omfgblauncher.LauncherProvider"
             android:authorities="com.t3hh4xx0r.omfgblauncher.settings"
-            android:writePermission="com.t3hh4xx0r.omfgblauncher.permission.WRITE_SETTINGS"
-            android:readPermission="com.t3hh4xx0r.omfgblauncher.permission.READ_SETTINGS" />
+            android:writePermission="com.android.launcher.permission.WRITE_SETTINGS"
+            android:readPermission="com.android.launcher.permission.READ_SETTINGS" />
 
     </application>
 </manifest>
