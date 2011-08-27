@@ -25,8 +25,13 @@ public class Preferences {
     }
 
     static final String PREF_HOMESCREEN_ENDLESS_LOOP = "EndlessHomescreenLoop";
+    static final String PREF_LAUNCHER_ORIENTATE = "LauncherOrientation";
 
     public boolean getEndlessScrolling() {
         return mPreferences.getBoolean(PREF_HOMESCREEN_ENDLESS_LOOP, true);
+    }
+    
+    public boolean getOrientate() {
+        return mPreferences.getBoolean(PREF_LAUNCHER_ORIENTATE, true);
     }
 }

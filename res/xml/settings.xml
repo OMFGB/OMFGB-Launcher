@@ -6,4 +6,9 @@
         android:key="EndlessHomescreenLoop"
         android:title="@string/settings_endless_desktop_loop"
         android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="LauncherOrientation"
+        android:title="@string/settings_launcher_orientation"
+        android:defaultValue="true"/>
 </PreferenceScreen>
