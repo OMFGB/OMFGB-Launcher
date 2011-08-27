@@ -19,7 +19,6 @@
 -->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:launcher="http://schemas.android.com/apk/res/com.t3hh4xx0r.omfgblauncher"
     package="com.t3hh4xx0r.omfgblauncher"
     android:sharedUserId="@string/sharedUserId"
     >
