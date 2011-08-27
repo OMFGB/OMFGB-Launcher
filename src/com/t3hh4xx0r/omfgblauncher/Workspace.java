@@ -858,10 +858,11 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         toScreen = Math.min(toScreen, count - 1);
 
         for (int i = fromScreen; i <= toScreen; i++) {
-            final CellLayout layout = (CellLayout) getChildAt(i);
-            layout.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
-            layout.setChildrenDrawnWithCacheEnabled(true);
-            layout.setChildrenDrawingCacheEnabled(true);
+            if (i >= mCurrentScreen - 1 || i <= mCurrentScreen + 1) {
+                final CellLayout layout = (CellLayout) getChildAt(i);
+                layout.setChildrenDrawnWithCacheEnabled(true);  
+                layout.setChildrenDrawingCacheEnabled(true);
+            }
         }
     }
 
