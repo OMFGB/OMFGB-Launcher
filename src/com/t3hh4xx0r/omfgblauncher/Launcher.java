@@ -36,9 +36,12 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -53,6 +56,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.preference.PreferenceManager;
 import android.provider.LiveFolders;
 import android.text.Selection;
 import android.text.SpannableStringBuilder;
@@ -95,7 +99,7 @@ import com.t3hh4xx0r.omfgblauncher.R;
  * Default launcher application.
  */
 public final class Launcher extends Activity
-        implements View.OnClickListener, OnLongClickListener, LauncherModel.Callbacks, AllAppsView.Watcher {
+        implements View.OnClickListener, OnLongClickListener, LauncherModel.Callbacks, AllAppsView.Watcher, OnSharedPreferenceChangeListener {
     static final String TAG = "Launcher";
     static final boolean LOGD = false;
 
@@ -123,6 +127,7 @@ public final class Launcher extends Activity
     private static final int REQUEST_PICK_LIVE_FOLDER = 8;
     private static final int REQUEST_PICK_APPWIDGET = 9;
     private static final int REQUEST_PICK_WALLPAPER = 10;
+    private static final int REQUEST_HOTSEAT_APPLICATION = 69;
 
     static final String EXTRA_SHORTCUT_DUPLICATE = "duplicate";
 
@@ -219,11 +224,27 @@ public final class Launcher extends Activity
     private Intent[] mHotseats = null;
     private Drawable[] mHotseatIcons = null;
     private CharSequence[] mHotseatLabels = null;
+    private int mHotseatNumber = 1;
+
+    private int HOTSEAT_LEFT = 3;
+    private int HOTSEAT_RIGHT = 4;
+
+    private static final String LAUNCHER_HOTSEAT_LEFT = "launcher_hotseat_left";
+    private static final String LAUNCHER_HOTSEAT_RIGHT = "launcher_hotseat_right";
+
+    private float iconScale = 0.80f;
+    private static int sIconWidth = -1;
+    private static int sIconHeight = -1;
+
+    private Context mContext;
+    private SharedPreferences mSharedPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPrefs.registerOnSharedPreferenceChangeListener(this);
         LauncherApplication app = ((LauncherApplication)getApplication());
         mModel = app.setLauncher(this);
         mIconCache = app.getIconCache();
@@ -419,18 +440,13 @@ public final class Launcher extends Activity
                 mHotseatIcons = null;
                 mHotseatLabels = null;
             }
-
-            TypedArray hotseatIconDrawables = getResources().obtainTypedArray(R.array.hotseat_icons);
-            for (int i=0; i<mHotseatConfig.length; i++) {
-                // load icon for this slot; currently unrelated to the actual activity
-                try {
-                    mHotseatIcons[i] = hotseatIconDrawables.getDrawable(i);
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    Log.w(TAG, "Missing hotseat_icons array item #" + i);
-                    mHotseatIcons[i] = null;
-                }
-            }
-            hotseatIconDrawables.recycle();
+        }
+    
+        try {
+            mHotseatConfig[0] = mSharedPrefs.getString(LAUNCHER_HOTSEAT_LEFT, mHotseatConfig[0]);
+            mHotseatConfig[1] = mSharedPrefs.getString(LAUNCHER_HOTSEAT_RIGHT, mHotseatConfig[1]);
+        }
+        catch (NullPointerException e) {
         }
 
         PackageManager pm = getPackageManager();
@@ -536,6 +552,20 @@ public final class Launcher extends Activity
                     );
             }
         }
+        for (int i = 0; i < mHotseatConfig.length; i++) {
+            try {
+                PackageManager pkm = getPackageManager();
+                mHotseatIcons[i] = pkm.getActivityIcon(mHotseats[i]);
+                mHotseatIcons[i] = scaledDrawable(mHotseatIcons[i], this, iconScale);
+            }
+            catch (ArrayIndexOutOfBoundsException ex) {
+                Log.w(TAG, "Missing hotseat_icons array item #" + i);
+                mHotseatIcons[i] = null;
+            }
+            catch (PackageManager.NameNotFoundException e) {
+                // Do nothing
+            }
+        }
     }
 
     @Override
@@ -548,7 +578,9 @@ public final class Launcher extends Activity
         // For example, the user would PICK_SHORTCUT for "Music playlist", and we
         // launch over to the Music app to actually CREATE_SHORTCUT.
 
-        if (resultCode == RESULT_OK && mAddItemCellInfo != null) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_HOTSEAT_APPLICATION) {
+            setHotseat(data);
+        } else if (resultCode == RESULT_OK && mAddItemCellInfo != null) {
             switch (requestCode) {
                 case REQUEST_PICK_APPLICATION:
                     completeAddApplication(this, data, mAddItemCellInfo);
@@ -578,12 +610,36 @@ public final class Launcher extends Activity
         } else if ((requestCode == REQUEST_PICK_APPWIDGET ||
                 requestCode == REQUEST_CREATE_APPWIDGET) && resultCode == RESULT_CANCELED &&
                 data != null) {
-            // Clean up the appWidgetId if we canceled
-            int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-            if (appWidgetId != -1) {
-                mAppWidgetHost.deleteAppWidgetId(appWidgetId);
-            }
+                // Clean up the appWidgetId if we canceled
+                int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+                if (appWidgetId != -1) {
+                    mAppWidgetHost.deleteAppWidgetId(appWidgetId);
+                }
         }
+    }
+        
+    private void pickHotseatShortcut(int hotseatNumber) {
+        mHotseatNumber = hotseatNumber;
+            Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            Intent pickIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+            pickIntent.putExtra(Intent.EXTRA_INTENT, mainIntent);
+            startActivityForResult(pickIntent, REQUEST_HOTSEAT_APPLICATION);
+    }
+
+    void setHotseat(Intent data) {
+        int hotseatNumber = mHotseatNumber;
+        SharedPreferences.Editor editor = mSharedPrefs.edit();
+
+        if (hotseatNumber == HOTSEAT_LEFT) {
+            editor.putString(LAUNCHER_HOTSEAT_LEFT, data.toUri(0));
+            editor.commit();
+        } else if (hotseatNumber == HOTSEAT_RIGHT) {
+            editor.putString(LAUNCHER_HOTSEAT_RIGHT, data.toUri(0));
+            editor.commit();
+        }
+        loadHotseats();
+        setupViews();
     }
 
     @Override
@@ -753,9 +809,11 @@ public final class Launcher extends Activity
         ImageView hotseatLeft = (ImageView) findViewById(R.id.hotseat_left);
         hotseatLeft.setContentDescription(mHotseatLabels[0]);
         hotseatLeft.setImageDrawable(mHotseatIcons[0]);
+        hotseatLeft.setOnLongClickListener(this);
         ImageView hotseatRight = (ImageView) findViewById(R.id.hotseat_right);
         hotseatRight.setContentDescription(mHotseatLabels[1]);
         hotseatRight.setImageDrawable(mHotseatIcons[1]);
+        hotseatRight.setOnLongClickListener(this);
 
         mPreviousView = (ImageView) dragLayer.findViewById(R.id.previous_screen);
         mNextView = (ImageView) dragLayer.findViewById(R.id.next_screen);
@@ -1614,6 +1672,17 @@ public final class Launcher extends Activity
                     showPreviews(v);
                 }
                 return true;
+            case R.id.hotseat_left:
+                mWorkspace.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                pickHotseatShortcut(HOTSEAT_LEFT);
+                return true;
+            case R.id.hotseat_right:
+                mWorkspace.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+                    HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                pickHotseatShortcut(HOTSEAT_RIGHT);
+                return true;
+                
         }
 
         if (isWorkspaceLocked()) {
@@ -2255,6 +2324,34 @@ public final class Launcher extends Activity
         sFolders.putAll(folders);
     }
 
+    static Drawable scaledDrawable(Drawable icon, Context context, float scale) {
+        final Resources resources = context.getResources();
+        sIconWidth = sIconHeight = (int) resources.getDimension(android.R.dimen.app_icon_size);
+
+        int width = sIconWidth;
+        int height = sIconHeight;
+
+        Bitmap original;
+        try {
+            original = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        }
+        catch (OutOfMemoryError e) {
+            return icon;
+        }
+        Canvas canvas = new Canvas(original);
+        canvas.setBitmap(original);
+        icon.setBounds(0, 0, width, height);
+        icon.draw(canvas);
+        try {
+            Bitmap endImage = Bitmap.createScaledBitmap(original, (int)(width*scale), (int)(height*scale), true);
+            original.recycle();
+            return new FastBitmapDrawable(endImage);
+        }
+        catch (OutOfMemoryError e) {
+            return icon;
+        }
+    }
+
     /**
      * Add the views for a widget to the workspace.
      *
@@ -2398,5 +2495,11 @@ public final class Launcher extends Activity
         mModel.dumpState();
         mAllAppsGrid.dumpState();
         Log.d(TAG, "END launcher2 dump state");
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sp,
+        String key) {
+        Log.d(TAG, "W.e d00d");
     }
 }
