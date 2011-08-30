@@ -11,4 +11,9 @@
         android:key="LauncherOrientation"
         android:title="@string/settings_launcher_orientation"
         android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="WallpaperScrolling"
+        android:title="@string/settings_wallpaper_scrolling"
+        android:defaultValue="true"/>
 </PreferenceScreen>
