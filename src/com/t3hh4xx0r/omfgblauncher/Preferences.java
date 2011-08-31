@@ -27,6 +27,7 @@ public class Preferences {
     static final String PREF_HOMESCREEN_ENDLESS_LOOP = "EndlessHomescreenLoop";
     static final String PREF_LAUNCHER_ORIENTATE = "LauncherOrientation";
     static final String PREF_WALLPAPER_SCROLLING = "WallpaperScrolling";
+    static final String PREF_EXTENDED_HOTSEATS = "ExtendedHotseats";
 
     public boolean getEndlessScrolling() {
         return mPreferences.getBoolean(PREF_HOMESCREEN_ENDLESS_LOOP, true);
@@ -38,5 +39,9 @@ public class Preferences {
 
     public boolean getWallpaperScrolling() {
         return mPreferences.getBoolean(PREF_WALLPAPER_SCROLLING, true);
+    }
+    
+    public boolean getExtendedHotseats() {
+        return mPreferences.getBoolean(PREF_EXTENDED_HOTSEATS, false);
     }
 }

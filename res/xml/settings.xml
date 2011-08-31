@@ -16,4 +16,9 @@
         android:key="WallpaperScrolling"
         android:title="@string/settings_wallpaper_scrolling"
         android:defaultValue="true"/>
+
+    <CheckBoxPreference
+        android:key="ExtendedHotseats"
+        android:title="@string/settings_extended_hotseats"
+        android:defaultValue="false"/>
 </PreferenceScreen>
