@@ -26,4 +26,9 @@
         android:key="ExtendedHotseats"
         android:title="@string/settings_extended_hotseats"
         android:defaultValue="false"/>
+
+    <CheckBoxPreference
+        android:key="DarkBackground"
+        android:title="@string/settings_dark_background"
+        android:defaultValue="false"/>
 </PreferenceScreen>

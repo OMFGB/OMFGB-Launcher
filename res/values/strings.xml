@@ -41,6 +41,7 @@
     <string name="settings_wallpaper_scrolling">Wallpaper Scrolling</string>
     <string name="settings_extended_hotseats">Use Four Hotseats</string>
     <string name="settings_scrollable_widgets">Scrollable Widgets</string>
+    <string name="settings_dark_background">Dark background</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Select wallpaper from</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->

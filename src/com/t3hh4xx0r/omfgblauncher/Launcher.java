@@ -229,13 +229,14 @@ public final class Launcher extends Activity
     private int HOTSEAT_FARLEFT = 1;
     private int HOTSEAT_FARRIGHT = 2;
     private int HOTSEAT_LEFT = 3;
-    private int HOTSEAT_RIGHT = 4;
+    private int HOTSEAT_RIGHT = 4;  
 
     private static final String LAUNCHER_HOTSEAT_LEFT = "launcher_hotseat_left";
     private static final String LAUNCHER_HOTSEAT_FARLEFT = "launcher_hotseat_farleft";
     private static final String LAUNCHER_HOTSEAT_RIGHT = "launcher_hotseat_right";
     private static final String LAUNCHER_HOTSEAT_FARRIGHT = "launcher_hotseat_farright";
     private boolean mUseExtendedHotseats = Preferences.getInstance().getExtendedHotseats();
+    private boolean mUseDarkBackground = Preferences.getInstance().getDarkBackground();
 
     private float iconScale = 0.80f;
     private static int sIconWidth = -1;
@@ -859,13 +860,21 @@ public final class Launcher extends Activity
             mNextView.setVisibility(View.GONE);
             hotseatfarRight.setVisibility(View.VISIBLE);
             hotseatfarLeft.setVisibility(View.VISIBLE);
-            dockBackground.setBackgroundResource(R.drawable.dock_four);
+            if (mUseDarkBackground) {
+                dockBackground.setBackgroundResource(R.drawable.dock_four_dark);
+            } else {
+               dockBackground.setBackgroundResource(R.drawable.dock_four);
+            }
         } else {
             mPreviousView.setVisibility(View.VISIBLE);
             mNextView.setVisibility(View.VISIBLE);
             hotseatfarRight.setVisibility(View.GONE);
             hotseatfarLeft.setVisibility(View.GONE);
-            dockBackground.setBackgroundResource(R.drawable.dock_two);
+            if(mUseDarkBackground) {
+               dockBackground.setBackgroundResource(R.drawable.dock_two_dark);
+            } else {
+               dockBackground.setBackgroundResource(R.drawable.dock_two); 
+            }
         }
 
         workspace.setOnLongClickListener(this);
