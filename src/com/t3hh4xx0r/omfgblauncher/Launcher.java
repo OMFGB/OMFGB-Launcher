@@ -2449,12 +2449,14 @@ public final class Launcher extends Activity
         }
 
     private void appwidgetReadyBroadcast(int appWidgetId, ComponentName cname) {
-        Intent ready = new Intent(LauncherIntent.Action.ACTION_READY).putExtra(
+        if (Preferences.getInstance().getScrollableWidgets()) {
+            Intent ready = new Intent(LauncherIntent.Action.ACTION_READY).putExtra(
             LauncherIntent.Extra.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
-                LauncherIntent.Extra.EXTRA_API_VERSION, LauncherMetadata.CurrentAPIVersion).
+            AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId).putExtra(
+            LauncherIntent.Extra.EXTRA_API_VERSION, LauncherMetadata.CurrentAPIVersion).
             setComponent(cname);
             sendBroadcast(ready);
+        }
     }
 
     /**

@@ -16,6 +16,11 @@
         android:key="WallpaperScrolling"
         android:title="@string/settings_wallpaper_scrolling"
         android:defaultValue="true"/>
+    
+    <CheckBoxPreference
+        android:key="ScrollableWidgets"
+        android:title="@string/settings_scrollable_widgets"
+        android:defaultValue="true"/>
 
     <CheckBoxPreference
         android:key="ExtendedHotseats"

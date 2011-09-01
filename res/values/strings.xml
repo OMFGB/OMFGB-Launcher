@@ -39,7 +39,8 @@
     <string name="settings_endless_desktop_loop">Endless Looping</string>
     <string name="settings_launcher_orientation">Auto-rotate Launcher</string>
     <string name="settings_wallpaper_scrolling">Wallpaper Scrolling</string>
-    <string name="settings_extended_hotseats">Use four hotseats</string>
+    <string name="settings_extended_hotseats">Use Four Hotseats</string>
+    <string name="settings_scrollable_widgets">Scrollable Widgets</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Select wallpaper from</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
