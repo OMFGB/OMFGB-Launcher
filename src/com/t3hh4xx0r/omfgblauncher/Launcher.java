@@ -909,9 +909,9 @@ public final class Launcher extends Activity
             index = 0;
         } else if (v.getId() == R.id.hotseat_right) {
             index = 1;
-        } else if (v.getId() == R.id.hotseat_farright) {
-            index = 2;
         } else if (v.getId() == R.id.hotseat_farleft) {
+            index = 2;
+        } else if (v.getId() == R.id.hotseat_farright) {
             index = 3;
         }
 
