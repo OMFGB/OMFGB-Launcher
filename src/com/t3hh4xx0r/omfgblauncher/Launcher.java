@@ -824,7 +824,7 @@ public final class Launcher extends Activity
         mHandleView.setLauncher(this);
         mHandleView.setOnClickListener(this);
         mHandleView.setOnLongClickListener(this);
-
+        ImageView dockBackground = (ImageView) findViewById(R.id.dock_background);
         ImageView hotseatLeft = (ImageView) findViewById(R.id.hotseat_left);
         hotseatLeft.setContentDescription(mHotseatLabels[0]);
         hotseatLeft.setImageDrawable(mHotseatIcons[0]);
@@ -833,14 +833,14 @@ public final class Launcher extends Activity
         hotseatRight.setContentDescription(mHotseatLabels[1]);
         hotseatRight.setImageDrawable(mHotseatIcons[1]);
         hotseatRight.setOnLongClickListener(this);
-        ImageView hotseatfarRight = (ImageView) findViewById(R.id.hotseat_farright);
-        hotseatfarRight.setContentDescription(mHotseatLabels[2]);
-        hotseatfarRight.setImageDrawable(mHotseatIcons[2]);
-        hotseatfarRight.setOnLongClickListener(this);
         ImageView hotseatfarLeft = (ImageView) findViewById(R.id.hotseat_farleft);
-        hotseatfarLeft.setContentDescription(mHotseatLabels[3]);
-        hotseatfarLeft.setImageDrawable(mHotseatIcons[3]);
+        hotseatfarLeft.setContentDescription(mHotseatLabels[2]);
+        hotseatfarLeft.setImageDrawable(mHotseatIcons[2]);
         hotseatfarLeft.setOnLongClickListener(this);
+        ImageView hotseatfarRight = (ImageView) findViewById(R.id.hotseat_farright);
+        hotseatfarRight.setContentDescription(mHotseatLabels[3]);
+        hotseatfarRight.setImageDrawable(mHotseatIcons[3]);
+        hotseatfarRight.setOnLongClickListener(this);
 
         mPreviousView = (ImageView) dragLayer.findViewById(R.id.previous_screen);
         mNextView = (ImageView) dragLayer.findViewById(R.id.next_screen);
@@ -857,19 +857,15 @@ public final class Launcher extends Activity
         if (mUseExtendedHotseats) {
             mPreviousView.setVisibility(View.GONE);
             mNextView.setVisibility(View.GONE);
-   
             hotseatfarRight.setVisibility(View.VISIBLE);
             hotseatfarLeft.setVisibility(View.VISIBLE);
-            hotseatLeft.setBackgroundResource(R.drawable.hotseat_bg_left);
-            hotseatRight.setBackgroundResource(R.drawable.hotseat_bg_right);
+            dockBackground.setBackgroundResource(R.drawable.dock_four);
         } else {
             mPreviousView.setVisibility(View.VISIBLE);
             mNextView.setVisibility(View.VISIBLE);
-
             hotseatfarRight.setVisibility(View.GONE);
             hotseatfarLeft.setVisibility(View.GONE);
-            hotseatLeft.setBackgroundResource(R.drawable.hotseat_bg_left);
-            hotseatRight.setBackgroundResource(R.drawable.hotseat_bg_right);
+            dockBackground.setBackgroundResource(R.drawable.dock_two);
         }
 
         workspace.setOnLongClickListener(this);

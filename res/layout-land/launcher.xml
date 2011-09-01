@@ -97,6 +97,14 @@
         android:layout_marginBottom="@dimen/half_status_bar_height"
         >
 
+        <ImageView
+            android:id="@+id/dock_background"
+            android:layout_height="fill_parent"
+            android:layout_width="@dimen/button_bar_height_portrait"
+            android:layout_gravity="right|center_vertical"
+            launcher:direction="vertical"
+        />
+
         <com.t3hh4xx0r.omfgblauncher.HandleView
             style="@style/HotseatButton"
             android:id="@+id/all_apps_button"
@@ -111,9 +119,7 @@
             android:id="@+id/hotseat_left"
             style="@style/HotseatButton.Left"
             android:layout_below="@id/all_apps_button"
-
             android:src="@drawable/hotseat_phone"
-
             android:onClick="launchHotSeat"
             />
 
@@ -121,15 +127,13 @@
             android:id="@+id/hotseat_right"
             style="@style/HotseatButton.Right"
             android:layout_above="@id/all_apps_button"
-
             android:src="@drawable/hotseat_browser"
-
             android:onClick="launchHotSeat"
             />
 
         <ImageView
             android:id="@+id/hotseat_farleft"
-            style="@style/HotseatButton.Left"
+            style="@style/HotseatButton.farLeft"
             android:layout_below="@id/hotseat_left"
             android:onClick="launchHotSeat"
             android:src="@drawable/hotseat_browser"
@@ -137,7 +141,7 @@
 
         <ImageView
             android:id="@+id/hotseat_farright"
-            style="@style/HotseatButton.Right"
+            style="@style/HotseatButton.farRight"
             android:layout_above="@id/hotseat_right"
             android:onClick="launchHotSeat"
             android:src="@drawable/hotseat_browser"
