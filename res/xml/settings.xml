@@ -30,5 +30,12 @@
     <CheckBoxPreference
         android:key="DarkBackground"
         android:title="@string/settings_dark_background"
-        android:defaultValue="false"/>
+        android:defaultValue="false"
+        android:dependency="TransparentBackground"/>
+    
+    <CheckBoxPreference
+        android:key="TransparentBackground"
+        android:title="@string/settings_transparent_background"
+        android:defaultValue="false"
+        android:disableDependentsState="true"/>
 </PreferenceScreen>

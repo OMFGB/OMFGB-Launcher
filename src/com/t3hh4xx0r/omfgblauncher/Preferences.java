@@ -30,6 +30,7 @@ public class Preferences {
     static final String PREF_SCROLLABLE_WIDGETS = "ScrollableWidgets";
     static final String PREF_EXTENDED_HOTSEATS = "ExtendedHotseats";
     static final String PREF_DARK_BACKGROUND = "DarkBackground";
+    static final String PREF_TRANS_BACKGROUND = "TransparentBackground";
 
     public boolean getEndlessScrolling() {
         return mPreferences.getBoolean(PREF_HOMESCREEN_ENDLESS_LOOP, true);
@@ -53,5 +54,9 @@ public class Preferences {
     
     public boolean getDarkBackground() {
         return mPreferences.getBoolean(PREF_DARK_BACKGROUND, false);
+    }
+    
+    public boolean getTransparentBackground() {
+        return mPreferences.getBoolean(PREF_TRANS_BACKGROUND, false);
     }
 }
