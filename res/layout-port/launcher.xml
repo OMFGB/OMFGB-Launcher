@@ -45,12 +45,9 @@
         android:layout_height="@dimen/button_bar_height"
         android:layout_gravity="bottom|left"
         android:layout_marginLeft="6dip"
-
         android:scaleType="center"
         android:src="@drawable/home_arrows_left"
-        
         android:onClick="previousScreen"
-
         android:focusable="true"
         android:clickable="true" />
 
@@ -60,12 +57,9 @@
         android:layout_height="@dimen/button_bar_height"
         android:layout_gravity="bottom|right"
         android:layout_marginRight="6dip"
-
         android:scaleType="center"
         android:src="@drawable/home_arrows_right"
-
         android:onClick="nextScreen"
-
         android:focusable="true"
         android:clickable="true" />
 

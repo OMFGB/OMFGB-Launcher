@@ -145,7 +145,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
     private static final float FLING_VELOCITY_INFLUENCE = 0.4f;
     
     private static class WorkspaceOvershootInterpolator implements Interpolator {
-        private static final float DEFAULT_TENSION = 0.9f;
+        private static final float DEFAULT_TENSION = 0.5f;
         private float mTension;
 
         public WorkspaceOvershootInterpolator() {
@@ -995,7 +995,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             if (mTouchState == TOUCH_STATE_SCROLLING) {
                 final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                final int velocityX = (int) velocityTracker.getXVelocity();
+                final int vMultiplier = 20;
+                final int velocityX = vMultiplier * (int) velocityTracker.getXVelocity();
                 
                 final int screenWidth = getWidth();
                 final int whichScreen = (int)Math.floor((getScrollX() + (screenWidth / 2.0)) / screenWidth);
@@ -1006,13 +1007,13 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     // Don't fling across more than one screen at a time.
                     final int bound = scrolledPos < whichScreen ?
                             mCurrentScreen - 1 : mCurrentScreen;
-                    snapToScreen(Math.min(whichScreen, bound), velocityX, true);
+                    snapToScreen(Math.min(whichScreen, bound), velocityX, false);
                 } else if (velocityX < -SNAP_VELOCITY && mCurrentScreen < getChildCount() - (Preferences.getInstance().getEndlessScrolling() ? 0 : 1)) {
                     // Fling hard enough to move right
                     // Don't fling across more than one screen at a time.
                     final int bound = scrolledPos > whichScreen ?
                             mCurrentScreen + 1 : mCurrentScreen;
-                    snapToScreen(Math.max(whichScreen, bound), velocityX, true);
+                    snapToScreen(Math.max(whichScreen, bound), velocityX, false);
                 } else {
                     snapToScreen(whichScreen, 0, true);
                 }
@@ -1081,7 +1082,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
         final int screenDelta = Math.max(1, Math.abs(whichScreen - mCurrentScreen));
         final int newX = whichScreen * getWidth();
         final int delta = newX - mScrollX;
-        int duration = (screenDelta + 1) * 100;
+        final int durationMultiplier = 60;
+        int duration = (screenDelta + 1) * durationMultiplier;
 
         if (!mScroller.isFinished()) {
             mScroller.abortAnimation();
@@ -1098,7 +1100,7 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
             duration += (duration / (velocity / BASELINE_FLING_VELOCITY))
                     * FLING_VELOCITY_INFLUENCE;
         } else {
-            duration += 100;
+            duration += durationMultiplier;
         }
 
         awakenScrollBars(duration);
