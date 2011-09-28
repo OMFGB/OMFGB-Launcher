@@ -240,6 +240,7 @@ public final class Launcher extends Activity
     private boolean mUseTransparentBackground = Preferences.getInstance().getTransparentBackground();
     private boolean mUseDarkBackground = Preferences.getInstance().getDarkBackground();
     private static boolean mDockIsHidden = Preferences.getInstance().getDockIsHidden();
+    private boolean mIsFirstLaunch = Preferences.getInstance().getIsFirstLaunch();
 
     private float iconScale = 0.80f;
     private static int sIconWidth = -1;
@@ -297,7 +298,29 @@ public final class Launcher extends Activity
 
         IntentFilter filter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         registerReceiver(mCloseSystemDialogsReceiver, filter);
+
+	if (mIsFirstLaunch) {
+		mIsFirstLaunch = false;
+		alertbox("Welcome to the OMFGB launcher", 
+		 "This launcher is very fast and gives the option for many commonly used features...\n" + 
+		 "-Remappable hotseats \n" +
+		 "-Fling up/down to hide the dock\n" +
+		 "-Customizable dock backgrounds\n" +
+		 "And many more.");
+	}
     }
+
+    protected void alertbox(String title, String mymessage) {
+           new AlertDialog.Builder(this)
+              .setMessage(mymessage)
+              .setTitle(title)
+              .setCancelable(true)
+              .setNeutralButton("OK",
+                 new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int whichButton){}
+                 })
+              .show();
+        }
 
     private void checkForLocaleChange() {
         if (sLocaleConfiguration == null) {

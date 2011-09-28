@@ -24,6 +24,7 @@ public class Preferences {
         }
     }
 
+    static final String PREF_IS_FIRST_LAUNCH = "IsFirstLaunch";
     static final String PREF_HOMESCREEN_ENDLESS_LOOP = "EndlessHomescreenLoop";
     static final String PREF_LAUNCHER_ORIENTATE = "LauncherOrientation";
     static final String PREF_WALLPAPER_SCROLLING = "WallpaperScrolling";
@@ -35,6 +36,10 @@ public class Preferences {
 
     public boolean getEndlessScrolling() {
         return mPreferences.getBoolean(PREF_HOMESCREEN_ENDLESS_LOOP, true);
+    }
+
+    public boolean getIsFirstLaunch() {
+        return mPreferences.getBoolean(PREF_IS_FIRST_LAUNCH, true);
     }
 
     public boolean getDockIsHidden() {
