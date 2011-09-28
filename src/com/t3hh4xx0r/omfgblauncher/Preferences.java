@@ -30,12 +30,17 @@ public class Preferences {
     static final String PREF_SCROLLABLE_WIDGETS = "ScrollableWidgets";
     static final String PREF_EXTENDED_HOTSEATS = "ExtendedHotseats";
     static final String PREF_DARK_BACKGROUND = "DarkBackground";
+    static final String PREF_DOCK_IS_HIDDEN = "DockIsHidden";
     static final String PREF_TRANS_BACKGROUND = "TransparentBackground";
 
     public boolean getEndlessScrolling() {
         return mPreferences.getBoolean(PREF_HOMESCREEN_ENDLESS_LOOP, true);
     }
-    
+
+    public boolean getDockIsHidden() {
+        return mPreferences.getBoolean(PREF_DOCK_IS_HIDDEN, true);
+    }
+
     public boolean getOrientate() {
         return mPreferences.getBoolean(PREF_LAUNCHER_ORIENTATE, true);
     }

@@ -1001,7 +1001,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                 final int screenWidth = getWidth();
                 final int whichScreen = (int)Math.floor((getScrollX() + (screenWidth / 2.0)) / screenWidth);
                 final float scrolledPos = (float) mScrollX / screenWidth;
-                
+                final int velocityY = vMultiplier * (int) velocityTracker.getYVelocity(mActivePointerId);
+
                 if (velocityX > SNAP_VELOCITY && (mCurrentScreen > (Preferences.getInstance().getEndlessScrolling() ? -1 : 0))) {
                     // Fling hard enough to move left.
                     // Don't fling across more than one screen at a time.
@@ -1014,6 +1015,14 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
                     final int bound = scrolledPos > whichScreen ?
                             mCurrentScreen + 1 : mCurrentScreen;
                     snapToScreen(Math.max(whichScreen, bound), velocityX, false);
+                } else if (velocityY > SNAP_VELOCITY) {
+		  //Fling down
+		    Log.d(TAG, "Fling down");
+		    mLauncher.toggleDockState();
+                } else if (velocityY < -SNAP_VELOCITY) {
+                  //Fling up
+                    Log.d(TAG, "Fling up");
+                    mLauncher.toggleDockState();
                 } else {
                     snapToScreen(whichScreen, 0, true);
                 }
