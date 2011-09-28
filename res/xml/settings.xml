@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+    
     <CheckBoxPreference
         android:key="EndlessHomescreenLoop"
         android:title="@string/settings_endless_desktop_loop"
+        android:summaryOn="@string/settings_endless_desktop_loop_summary_on"
+        android:summaryOff="@string/settings_endless_desktop_loop_summary_off"
         android:defaultValue="true"/>
 
     <CheckBoxPreference
         android:key="LauncherOrientation"
         android:title="@string/settings_launcher_orientation"
+        android:summaryOn="@string/settings_launcher_orientation_summary_on"
+        android:summaryOff="@string/settings_launcher_orientation_summary_off"
         android:defaultValue="true"/>
 
     <CheckBoxPreference
         android:key="WallpaperScrolling"
         android:title="@string/settings_wallpaper_scrolling"
+        android:summaryOn="@string/settings_wallpaper_scrolling_summary_on"
+        android:summaryOff="@string/settings_wallpaper_scrolling_summary_off"
         android:defaultValue="true"/>
     
     <CheckBoxPreference
         android:key="ScrollableWidgets"
         android:title="@string/settings_scrollable_widgets"
+        android:summaryOn="@string/settings_scrollable_widgets_summary_on"
+        android:summaryOff="@string/settings_scrollable_widgets_summary_off"
         android:defaultValue="true"/>
 
     <CheckBoxPreference
         android:key="ExtendedHotseats"
         android:title="@string/settings_extended_hotseats"
+        android:summaryOn="@string/settings_extended_hotseats_summary_on"
+        android:summaryOff="@string/settings_extended_hotseats_summary_off"
         android:defaultValue="false"/>
 
     <CheckBoxPreference
         android:key="DarkBackground"
         android:title="@string/settings_dark_background"
+        android:summaryOn="@string/settings_dark_background_summary_on"
+        android:summaryOff="@string/settings_dark_background_summary_off"
         android:defaultValue="false"
         android:dependency="TransparentBackground"/>
     
     <CheckBoxPreference
         android:key="TransparentBackground"
         android:title="@string/settings_transparent_background"
+        android:summaryOn="@string/settings_transparent_background_summary_on"
+        android:summaryOff="@string/settings_transparent_background_summary_off"
         android:defaultValue="false"
         android:disableDependentsState="true"/>
 </PreferenceScreen>

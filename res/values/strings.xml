@@ -37,12 +37,26 @@
     <!-- Menus -->
     <string name="menu_launcher_settings">Launcher Prefs</string>
     <string name="settings_endless_desktop_loop">Endless Looping</string>
+    <string name="settings_endless_desktop_loop_summary_on">Workspaces will infinitely loop</string>
+    <string name="settings_endless_desktop_loop_summary_off">Workspaces will end on number of screens (stock behavior)</string>
     <string name="settings_launcher_orientation">Auto-rotate Launcher</string>
+    <string name="settings_launcher_orientation_summary_on">Launcher will automatically change orientations</string>
+    <string name="settings_launcher_orientation_summary_off">Launcher will operate in portrait mode only</string>
     <string name="settings_wallpaper_scrolling">Wallpaper Scrolling</string>
+    <string name="settings_wallpaper_scrolling_summary_on">Wallpaper will scroll with workspace swiping</string>
+    <string name="settings_wallpaper_scrolling_summary_off">Wallpaper will stay stationary during workspace swiping</string>
     <string name="settings_extended_hotseats">Use Four Hotseats</string>
+    <string name="settings_extended_hotseats_summary_on">Launcher will use four hotseats in the dock (dots will be disabled)</string>
+    <string name="settings_extended_hotseats_summary_off">Launcher will use two hotseats in the dock (dots will be enabled)</string>
     <string name="settings_scrollable_widgets">Scrollable Widgets</string>
+    <string name="settings_scrollable_widgets_summary_on">Launcher will support and use scrollable widgets when available</string>
+    <string name="settings_scrollable_widgets_summary_off">Scrollable widget support will be disabled</string>
     <string name="settings_dark_background">Dark background</string>
+    <string name="settings_dark_background_summary_on">Launcher will use darker background for dock image</string>
+    <string name="settings_dark_background_summary_off">Dark dock background disabled</string>
     <string name="settings_transparent_background">No background</string>
+    <string name="settings_transparent_background_summary_on">No dock background will be used in Launcher</string>
+    <string name="settings_transparent_background_summary_off">Transparent dock background disabled</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Select wallpaper from</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
