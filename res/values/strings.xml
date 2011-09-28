@@ -57,6 +57,8 @@
     <string name="settings_transparent_background">No background</string>
     <string name="settings_transparent_background_summary_on">No dock background will be used in Launcher</string>
     <string name="settings_transparent_background_summary_off">Transparent dock background disabled</string>
+    <string name="launcher_settings_cat_screen">Screen Settings</string>
+    <string name="launcher_settings_cat_dock">Dock Settings</string>
     <!-- Title of dialog that appears after user selects Wallpaper from menu -->
     <string name="chooser_wallpaper">Select wallpaper from</string>
     <!-- Button label on Wallpaper Gallery screen; user selects this button to set a specific wallpaper -->
