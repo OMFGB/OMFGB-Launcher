@@ -240,7 +240,7 @@ public final class Launcher extends Activity
     private boolean mUseTransparentBackground = Preferences.getInstance().getTransparentBackground();
     private boolean mUseDarkBackground = Preferences.getInstance().getDarkBackground();
     private static boolean mDockIsHidden = Preferences.getInstance().getDockIsHidden();
-    private boolean mIsFirstLaunch = Preferences.getInstance().getIsFirstLaunch();
+    private static boolean mIsFirstLaunch = Preferences.getInstance().getIsFirstLaunch();
 
     private float iconScale = 0.80f;
     private static int sIconWidth = -1;
