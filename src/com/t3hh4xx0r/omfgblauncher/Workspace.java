@@ -130,8 +130,8 @@ public class Workspace extends WidgetSpace implements DropTarget, DragSource, Dr
 
     private int mActivePointerId = INVALID_POINTER;
     
-    private Drawable mPreviousIndicator;
-    private Drawable mNextIndicator;
+    public Drawable mPreviousIndicator;
+    public Drawable mNextIndicator;
     
     private static final float NANOTIME_DIV = 1000000000.0f;
     private static final float SMOOTHING_SPEED = 0.75f;
