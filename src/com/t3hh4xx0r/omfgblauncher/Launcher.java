@@ -902,10 +902,8 @@ public final class Launcher extends Activity
                dockBackground.setVisibility(View.VISIBLE);
             }
         } else {
-	    if (!mDockIsHidden) {
-               mPreviousView.setVisibility(View.VISIBLE);
-               mNextView.setVisibility(View.VISIBLE);
-	    }
+            mPreviousView.setVisibility(View.VISIBLE);
+            mNextView.setVisibility(View.VISIBLE);
             hotseatfarRight.setVisibility(View.GONE);
             hotseatfarLeft.setVisibility(View.GONE);
             if (mUseTransparentBackground) {
@@ -2615,15 +2613,9 @@ public final class Launcher extends Activity
 	if (mDockIsHidden) {
 		mDockIsHidden = false;
 		mDockZone.setVisibility(View.VISIBLE);
-		if (!mUseExtendedHotseats) {
-   		    mPreviousView.setVisibility(View.VISIBLE);
-                    mNextView.setVisibility(View.VISIBLE);
-		}
 	} else {
 		mDockIsHidden = true;
 		mDockZone.setVisibility(View.GONE);
-                mPreviousView.setVisibility(View.GONE);
-                mNextView.setVisibility(View.GONE);
 	}
 	setupViews();
     }
