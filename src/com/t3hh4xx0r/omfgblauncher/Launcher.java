@@ -79,7 +79,6 @@ import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
 
@@ -194,6 +193,7 @@ public final class Launcher extends Activity
     private DeleteZone mDeleteZone;
     private HandleView mHandleView;
     private AllAppsView mAllAppsGrid;
+
     private Bundle mSavedState;
 
     private SpannableStringBuilder mDefaultKeySsb = null;
@@ -217,7 +217,6 @@ public final class Launcher extends Activity
 
     private ImageView mPreviousView;
     private ImageView mNextView;
-    public static RelativeLayout mDockZone;
 
     // Hotseats (quick-launch icons next to AllApps)
     private static final int NUM_HOTSEATS = 2;
@@ -239,7 +238,6 @@ public final class Launcher extends Activity
     private boolean mUseExtendedHotseats = Preferences.getInstance().getExtendedHotseats();
     private boolean mUseTransparentBackground = Preferences.getInstance().getTransparentBackground();
     private boolean mUseDarkBackground = Preferences.getInstance().getDarkBackground();
-    private static boolean mDockIsHidden = Preferences.getInstance().getDockIsHidden();
     private static boolean mIsFirstLaunch = Preferences.getInstance().getIsFirstLaunch();
 
     private float iconScale = 0.80f;
@@ -827,7 +825,7 @@ public final class Launcher extends Activity
     /**
      * Finds all the views we need and configure them properly.
      */
-    public void setupViews() {
+    private void setupViews() {
         mUseExtendedHotseats = Preferences.getInstance().getExtendedHotseats();
    	mUseTransparentBackground = Preferences.getInstance().getTransparentBackground();
     	mUseDarkBackground = Preferences.getInstance().getDarkBackground();
@@ -836,8 +834,6 @@ public final class Launcher extends Activity
 
         DragLayer dragLayer = (DragLayer) findViewById(R.id.drag_layer);
         dragLayer.setDragController(dragController);
-
-        RelativeLayout mDockZone = (RelativeLayout)findViewById(R.id.all_apps_button_cluster);
 
         mAllAppsGrid = (AllAppsView)dragLayer.findViewById(R.id.all_apps_view);
         mAllAppsGrid.setLauncher(this);
@@ -2608,26 +2604,19 @@ public final class Launcher extends Activity
         Log.d(TAG, "END launcher2 dump state");
     }
 
-    public void toggleDockState() {
-        RelativeLayout mDockZone = (RelativeLayout)findViewById(R.id.all_apps_button_cluster);
-	if (mDockIsHidden) {
-		mDockIsHidden = false;
-		mDockZone.setVisibility(View.VISIBLE);
-	} else {
-		mDockIsHidden = true;
-		mDockZone.setVisibility(View.GONE);
-	}
-	setupViews();
-    }
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sp,
         String key) {
 
-        if (key.equals("ExtendedHotseats") || key.equals("DarkBackground") || key.equals("TransparentBackground")) {
+        if (key.equals("ExtendedHotseats")) {
 	    setupViews();
-        } else {
+        }
+        else if (key.equals("DarkBackground")) {
+	   setupViews();
+        }
+        else if (key.equals("TransparentBackground")) {
+	   setupViews();
+        }
         Log.d(TAG, "W.e d00d");
-	}
     }
 }

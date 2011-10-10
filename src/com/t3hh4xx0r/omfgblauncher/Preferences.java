@@ -31,7 +31,6 @@ public class Preferences {
     static final String PREF_SCROLLABLE_WIDGETS = "ScrollableWidgets";
     static final String PREF_EXTENDED_HOTSEATS = "ExtendedHotseats";
     static final String PREF_DARK_BACKGROUND = "DarkBackground";
-    static final String PREF_DOCK_IS_HIDDEN = "DockIsHidden";
     static final String PREF_TRANS_BACKGROUND = "TransparentBackground";
 
     public boolean getEndlessScrolling() {
@@ -40,10 +39,6 @@ public class Preferences {
 
     public boolean getIsFirstLaunch() {
         return mPreferences.getBoolean(PREF_IS_FIRST_LAUNCH, true);
-    }
-
-    public boolean getDockIsHidden() {
-        return mPreferences.getBoolean(PREF_DOCK_IS_HIDDEN, true);
     }
 
     public boolean getOrientate() {
