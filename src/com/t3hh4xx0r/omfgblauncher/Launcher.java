@@ -103,7 +103,7 @@ public final class Launcher extends Activity
         implements View.OnClickListener, OnLongClickListener, LauncherModel.Callbacks, AllAppsView.Watcher, OnSharedPreferenceChangeListener {
     static final String TAG = "Launcher";
     static final boolean LOGD = false;
-
+    
     static final boolean PROFILE_STARTUP = false;
     static final boolean DEBUG_WIDGETS = false;
     static final boolean DEBUG_USER_INTERFACE = false;
@@ -117,9 +117,8 @@ public final class Launcher extends Activity
     private static final int MENU_WALLPAPER_SETTINGS = MENU_MANAGE_APPS + 1;
     private static final int MENU_LAUNCHER_SETTINGS = MENU_WALLPAPER_SETTINGS + 1;
     private static final int MENU_SEARCH = MENU_LAUNCHER_SETTINGS + 1;
-    private static final int MENU_GOD_MODE = MENU_SEARCH + 1;
-    private static final int MENU_NOTIFICATIONS = MENU_SEARCH + 1;
-    private static final int MENU_SETTINGS = MENU_NOTIFICATIONS + 1;
+    private static final int MENU_OPTION = MENU_SEARCH + 1;
+    private static final int MENU_SETTINGS = MENU_OPTION + 1;
 
     private static final int REQUEST_CREATE_SHORTCUT = 1;
     private static final int REQUEST_CREATE_LIVE_FOLDER = 4;
@@ -207,6 +206,7 @@ public final class Launcher extends Activity
     private boolean mWaitingForResult;
     private boolean mOnResumeNeedsLoad;
 
+    private boolean mGodModeExists;
     private Bundle mSavedInstanceState;
 
     private LauncherModel mModel;
@@ -1284,11 +1284,13 @@ public final class Launcher extends Activity
 
 	File godmode = new File("/system/app/God_Mode.apk");
 	if (godmode.exists()) {
-	menu.add(0, MENU_GOD_MODE, 0, R.string.menu_god_mode)
+	mGodModeExists = true;
+	menu.add(0, MENU_OPTION, 0, R.string.menu_god_mode)
                 .setIcon(android.R.drawable.ic_menu_manage)
                 .setAlphabeticShortcut('G');
 	} else {
-        menu.add(0, MENU_NOTIFICATIONS, 0, R.string.menu_notifications)
+	mGodModeExists = false;
+        menu.add(0, MENU_OPTION, 0, R.string.menu_notifications)
                 .setIcon(com.android.internal.R.drawable.ic_menu_notifications)
                 .setAlphabeticShortcut('N');
 	}
@@ -1342,17 +1344,19 @@ public final class Launcher extends Activity
             case MENU_SEARCH:
                 onSearchRequested();
                 return true;
-            case MENU_NOTIFICATIONS:
-		showNotifications();
-		return true;
-	    case MENU_GOD_MODE:
-		Intent i = new Intent();
+            case MENU_OPTION:
+		if (mGodModeExists) {
+   	        Intent i = new Intent();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setClassName("com.t3hh4xx0r","com.t3hh4xx0r.addons.MainMenu");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+		} else {
+		showNotifications();
+		}
                 return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
