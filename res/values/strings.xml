@@ -35,6 +35,7 @@
     <string name="folder_name">Folder</string>
     <string name="select_custom_app_title">Select custom app</string>
     <!-- Menus -->
+    <string name="menu_god_mode">God Mode</string>
     <string name="menu_launcher_settings">Launcher Prefs</string>
     <string name="settings_endless_desktop_loop">Endless Looping</string>
     <string name="settings_endless_desktop_loop_summary_on">Workspaces will infinitely loop</string>

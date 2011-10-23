@@ -86,6 +86,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.DataInputStream;
@@ -116,6 +117,7 @@ public final class Launcher extends Activity
     private static final int MENU_WALLPAPER_SETTINGS = MENU_MANAGE_APPS + 1;
     private static final int MENU_LAUNCHER_SETTINGS = MENU_WALLPAPER_SETTINGS + 1;
     private static final int MENU_SEARCH = MENU_LAUNCHER_SETTINGS + 1;
+    private static final int MENU_GOD_MODE = MENU_SEARCH + 1;
     private static final int MENU_NOTIFICATIONS = MENU_SEARCH + 1;
     private static final int MENU_SETTINGS = MENU_NOTIFICATIONS + 1;
 
@@ -302,7 +304,6 @@ public final class Launcher extends Activity
 		alertbox("Welcome to the OMFGB launcher", 
 		 "This launcher is very fast and gives the option for many commonly used features...\n" + 
 		 "-Remappable hotseats \n" +
-		 "-Fling up/down to hide the dock\n" +
 		 "-Customizable dock backgrounds\n" +
 		 "And many more.");
 	}
@@ -1280,10 +1281,17 @@ public final class Launcher extends Activity
         menu.add(0, MENU_SEARCH, 0, R.string.menu_search)
                 .setIcon(android.R.drawable.ic_search_category_default)
                 .setAlphabeticShortcut(SearchManager.MENU_KEY);
+
+	File godmode = new File("/system/app/God_Mode.apk");
+	if (godmode.exists()) {
+	menu.add(0, MENU_GOD_MODE, 0, R.string.menu_god_mode)
+                .setIcon(android.R.drawable.ic_menu_manage)
+                .setAlphabeticShortcut('G');
+	} else {
         menu.add(0, MENU_NOTIFICATIONS, 0, R.string.menu_notifications)
                 .setIcon(com.android.internal.R.drawable.ic_menu_notifications)
                 .setAlphabeticShortcut('N');
-
+	}
         final Intent settings = new Intent(android.provider.Settings.ACTION_SETTINGS);
         settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                 Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -1335,7 +1343,14 @@ public final class Launcher extends Activity
                 onSearchRequested();
                 return true;
             case MENU_NOTIFICATIONS:
-                showNotifications();
+		showNotifications();
+		return true;
+	    case GOD_MODE:
+		Intent i = new Intent();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setClassName("com.t3hh4xx0r","com.t3hh4xx0r.addons.MainMenu");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 return true;
         }
 
