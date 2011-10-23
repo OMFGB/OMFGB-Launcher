@@ -20,6 +20,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.t3hh4xx0r.omfgblauncher"
+    android:versionCode="2"
+    android:versionName="1.0"
     android:sharedUserId="@string/sharedUserId"
     >
 
