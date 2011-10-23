@@ -1345,7 +1345,7 @@ public final class Launcher extends Activity
             case MENU_NOTIFICATIONS:
 		showNotifications();
 		return true;
-	    case GOD_MODE:
+	    case MENU_GOD_MODE:
 		Intent i = new Intent();
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setClassName("com.t3hh4xx0r","com.t3hh4xx0r.addons.MainMenu");
